@@ -1,0 +1,23 @@
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
+
+# Mock blockchain data (replace this with your actual blockchain implementation)
+blockchain = []
+
+class Block:
+    def __init__(self, index, data, previous_hash):
+        self.index = index
+        self.data = data
+        self.previous_hash = previous_hash
+
+# Initial block to start the blockchain
+genesis_block = Block(0, "Genesis Block", "0")
+blockchain.append(genesis_block)
+
+@app.route('/')
+def index():
+    return render_template('index.html', blockchain=blockchain)
+
+if __name__ == '__main__':
+    app.run(debug=True)
