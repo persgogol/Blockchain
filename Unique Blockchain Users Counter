@@ -1,0 +1,33 @@
+from web3 import Web3
+
+def count_unique_users(node_url):
+    # Connect to the Ethereum blockchain node
+    web3 = Web3(Web3.HTTPProvider(node_url))
+
+    # Get the latest block number
+    latest_block_number = web3.eth.block_number
+
+    # Initialize a set to store unique user addresses
+    unique_users = set()
+
+    # Iterate over blocks to count unique users
+    for block_number in range(latest_block_number):
+        block = web3.eth.get_block(block_number)
+        transactions = block['transactions']
+        for tx_hash in transactions:
+            tx = web3.eth.get_transaction(tx_hash)
+            sender = tx['from']
+            recipient = tx['to']
+
+            # Add sender and recipient addresses to the set
+            unique_users.add(sender)
+            if recipient:
+                unique_users.add(recipient)
+
+    # Return the count of unique user addresses
+    return len(unique_users)
+
+if __name__ == "__main__":
+    node_url = 'https://mainnet.infura.io/v3/your_infura_project_id'  # Replace with your Ethereum node URL
+    unique_users_count = count_unique_users(node_url)
+    print("Unique Blockchain Users Count:", unique_users_count)
